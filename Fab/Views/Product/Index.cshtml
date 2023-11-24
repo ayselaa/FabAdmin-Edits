@@ -1,0 +1,727 @@
+﻿@model Fab.ViewModels.ProductVM.GetAllVM;
+
+@{
+    // var model = Model.Datas.SelectMany(x => x.Categories);
+    var language = "";
+    var prevlanguage = "";
+    var count = 1;
+    var namecount="";
+
+} 
+<style>
+    .column_acc_items label input {
+        visibility: hidden;
+    }
+
+    .column_acc_items label {
+        cursor: pointer;
+    }
+
+    #searchLink {
+        color: #FFF;
+        font-family: "Poppins", sans-serif;
+        font-size: 17px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 33px; /* 194.118% */
+        border-radius: 8px;
+        background: #DF363C;
+        width: 50%;
+    }
+
+        #searchLink:hover {
+            background: #FF545A;
+        }
+
+    #resetFiltr:hover {
+        background: #96969699;
+    }
+
+    #resetFiltr {
+        color: #FFF;
+        font-family: "Poppins", sans-serif;
+        font-size: 17px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 33px; /* 194.118% */
+        border-radius: 8px;
+        background: #969696;
+        width: 50%;
+    }
+
+    .flex-filtr-btn {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        gap: 1rem;
+    }
+</style>
+<main>
+    <section id="head_bg" style="background-image: url(./assets/img/insan.resurslari/bg-other.png);">
+        <div class="container">
+            <div class="ir-title">
+                <div class="ir-title-links">
+                    <a href="index.html">Ana səhifə</a>
+                    <img src="./assets/img/ir.svg" alt="svg">
+                    <a href="insan.resurslari.html">Məhsullar</a>
+                    <img src="./assets/img/ir.svg" alt="svg">
+                    <a href="insan.resurslari.html">Boya</a>
+                </div>
+                <div class="ir-title-text">
+                    <p>Məhsullar</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="All_Mehsullar">
+        <div class="container">
+            <div class="mehsulllar_grid">
+                @* @Html.Partial("_FilterPartial", Model.Categories) *@
+
+
+
+                <div class="mehsullar-accordion-filters">
+                    <div class="top-filters">
+                        <div class="accordion accordion-flush acc-border" id="accordionFlushExample">
+
+                            <div class="accordion-item">
+                                @foreach (var item in Model.Categories.Categories)
+                                {
+                                    var collapseId = "flush-collapse-" + item.Id;
+                                    <h2 class="accordion-header" id="flush-heading-@item.Id">
+                                        <button class="accordion-button collapsed mehsullar-acc-button" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#@collapseId"
+                                            aria-expanded="false" aria-controls="@collapseId" id="@item.Id">
+                                            @item.Name
+                                        </button>
+                                    </h2>
+                                    <div id="@collapseId" class="accordion-collapse collapse"
+                                     aria-labelledby="flush-heading-@item.Id" data-bs-parent="#accordionFlushExample">
+                                        <div class="accordion-body">
+                                            <ul class="column_acc_items p-left" id="subcategoryitems-@item.Id">
+                                                @foreach (var subitem in item.Subcategories)
+                                                {
+                                                    <label>
+                                                        <input style="margin-right:0.5rem; visibility:hidden;" type="radio" name="option" id="@item.Id" value="@subitem.Id" class="subcategory-input custom-radio">@subitem.Name
+                                                    </label>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="bottom-filters">
+                        <div class="accordion" id="accordionExample">
+                            <div class="accordion-item border-none" id="acc-itemforexp">
+
+                                @if (Model.Categories.Applicat.Count() != 0)
+                                {
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button collapsed mehsullar-acc-button-2" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                aria-expanded="false" aria-controls="collapseOne">
+                                            Tətbiq Sahələri
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse"
+                                         aria-labelledby="headingOne" data-bs-parent="#acc-itemforexpOne">
+                                        <div class="accordion-body" style="padding-top: 0;">
+                                            <ul class="column_acc_items border-none">
+                                                @foreach (var app in Model.Categories.Applicat)
+                                                {
+                                                    <label>
+                                                        <input style="visibility:hidden;" type="radio" name="appOption" data="@app.CategoryId" value="@app.Id">@app.Name
+                                                    </label>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+
+                                @if (Model.Categories.Apperance.Count() != 0)
+                                {
+                                    <h2 class="accordion-header" id="headingTwo">
+                                        <button class="accordion-button collapsed mehsullar-acc-button-2" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                aria-expanded="false" aria-controls="collapseTwo">
+                                            Görünüş
+                                        </button>
+                                    </h2>
+
+                                    <div id="collapseTwo" class="accordion-collapse collapse"
+                                         aria-labelledby="headingTwo" data-bs-parent="#acc-itemforexpTwo">
+                                        <div class="accordion-body" style="padding-top: 0;">
+                                            <ul class="column_acc_items border-none">
+                                                @foreach (var apear in Model.Categories.Apperance)
+                                                {
+                                                    <label>
+                                                        <input style="visibility:hidden;" type="radio" name="apearOption" value="@apear.Id">@apear.Name
+                                                    </label>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+
+                                @if (Model.Categories.Chars.Count() != 0)
+                                {
+                                    <h2 class="accordion-header" id="headingThree">
+                                        <button class="accordion-button collapsed mehsullar-acc-button-2" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                                                aria-expanded="false" aria-controls="collapseThree">
+                                            Xususiyyetler
+                                        </button>
+                                    </h2>
+
+                                    <div id="collapseThree" class="accordion-collapse collapse"
+                                         aria-labelledby="headingThree" data-bs-parent="#acc-itemforexpThree">
+                                        <div class="accordion-body" style="padding-top: 0;">
+                                            <ul class="column_acc_items border-none">
+                                                @foreach (var charfield in Model.Categories.Chars)
+                                                {
+                                                    <label>
+                                                        <input style="visibility:hidden;" type="radio" name="charOption" value="@charfield.Id">@charfield.Name
+                                                    </label>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="flex-filtr-btn">
+                        <button id="resetFiltr" type="button" class="btn">
+                            Sıfırla
+                        </button>
+                        <button id="searchLink" type="button" class="btn">
+                            Təsdiq
+                        </button>
+                    </div>
+                </div>
+
+
+
+
+              @*   <div class="mehsullar-accordion-filters">
+                    <div class="top-filters">
+                        <div class="accordion accordion-flush acc-border" id="accordionFlushExample">
+
+                            <div class="accordion-item">
+
+                                @foreach (var item in ViewBag.allcatg)
+                                    {
+                                        var collapseId = "flush-collapse-" + item.Id; // Benzersiz bir id oluştur
+                                        <h2 class="accordion-header" id="flush-headingOne">
+                                            <button class="accordion-button collapsed mehsullar-acc-button filtercategoryclass" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#@collapseId"
+                                                aria-expanded="false" aria-controls="@collapseId" id="@item.Id">
+                                                @item.Name
+                                            </button>
+                                        </h2>
+                                        <div id="@collapseId" class="accordion-collapse collapse"
+                                         aria-labelledby="flush-heading-@item.Id" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                                            <ul class="column_acc_items p-left" id="subcategoryitems-@item.Id">
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    }
+                                
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="bottom-filters">
+                        <div class="accordion" id="accordionExample">
+                            <div class="accordion-item border-none" id="acc-itemforexp">
+                                <h2 class="accordion-header" id="heading${item.id}">
+                                    <button class="accordion-button collapsed mehsullar-acc-button-2 acc-buttonexp" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapse${item.id}"
+                                            aria-expanded="false" aria-controls="collapse${item.id}" id="${item.id}">
+                                        ${item.name}
+                                    </button>
+                                </h2>
+
+                                <div id="collapse${item.id}" class="accordion-collapse collapse"
+                                     aria-labelledby="heading${item.id}" data-bs-parent="accordionExample">
+                                    <div class="accordion-body" style="padding-top: 0;">
+                                        <ul class="column_acc_items border-none">
+                                            ${item.value.map(value => `
+                                            <li><a href="#" class="valueid" id="${value.id}">${value.name}</a></li>`).join('')}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <button style="height:fit-content;background-color:#EF2955;color:white;" id="searchLink" type="button" class="btn">
+                        Search
+                    </button>
+                </div> *@
+
+                <div class="mehsullar-cards">
+                    @foreach (var item in Model.Products.Datas)
+                    {
+                        <div class="mehsullar-card" id="@item.Id">
+                            <div class="mehsullar-card-img">
+                                <a asp-action="Detail" asp-controller="Product" asp-route-id="@item.Id">
+                                    <img src="./assets/img/mehsullar/@item.Image" alt="mehsullar">
+                                </a>
+                            </div>
+                            <div class="mehsullar-card-texts">
+                                <p class="mehsullar-card-title">@item.Name</p>
+                                <p class="mehsullar-card-desc">@item.Size</p>
+                            </div>
+                        </div>
+                    }
+                   
+              
+                </div>
+            </div>
+            <nav>
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(Model.Products.TotalPages == 1 ? "disabled" : "")">
+                        @if (Model.LangCode == "az")
+                        {
+                            prevlanguage = "Əvvəl";
+                        }
+                        else if (Model.LangCode == "en")
+                        {
+                            prevlanguage = "Previous";
+                        }
+                        else
+                        {
+                            prevlanguage = "Предыдущий";
+                        }
+                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.Products.TotalPages - 1)" tabindex="-1">@prevlanguage</a>
+                    </li>
+                    @if (Model.Products.TotalPages <= 10)
+                    {
+                        for (int i = 1; i <= Model.Products.TotalPages; i++)
+                        {
+                            <li class="page-item @(Model.Products.TotalPages == i ? "active" : "")">
+                                <a class="page-link" asp-route-categoryid="ViewBag.Categoryid=categoryid" asp-route-subctgid="@ViewBag.SubCategoryid" asp-route-appearanceid="@ViewBag.Appear" asp-route-charid="@ViewBag.Charid" asp-route-applicationid="@ViewBag.Applicate" asp-action="Index" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        int currentPage = Model.Products.PageIndex;
+                        int totalPages = Model.Products.TotalPages;
+
+                        int startPage = currentPage - 4;
+                        int endPage = currentPage + 5;
+
+                        if (startPage <= 0)
+                        {
+                            startPage = 1;
+                            endPage = 10;
+                        }
+                        else if (endPage > totalPages)
+                        {
+                            startPage = totalPages - 9;
+                            endPage = totalPages;
+                        }
+
+                        if (startPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-route-categoryid="ViewBag.Categoryid=categoryid" asp-route-subctgid="@ViewBag.SubCategoryid" asp-route-appearanceid="@ViewBag.Appear" asp-route-charid="@ViewBag.Charid" asp-route-applicationid="@ViewBag.Applicate" asp-action="Index" asp-route-page="1">1</a>
+                            </li>
+                            if (startPage > 2)
+                            {
+                                <li class="page-item disabled">
+                                    <a class="page-link">...</a>
+                                </li>
+                            }
+                        }
+
+                        for (int i = startPage; i <= endPage; i++)
+                        {
+                            <li class="page-item @(currentPage == i ? "active" : "")">
+                                <a class="page-link" asp-route-categoryid="ViewBag.Categoryid=categoryid" asp-route-subctgid="@ViewBag.SubCategoryid" asp-route-appearanceid="@ViewBag.Appear" asp-route-charid="@ViewBag.Charid" asp-route-applicationid="@ViewBag.Applicate" asp-action="Index" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+
+                        if (endPage < totalPages)
+                        {
+                            if (endPage < totalPages - 1)
+                            {
+                                <li class="page-item disabled">
+                                    <a class="page-link">...</a>
+                                </li>
+                            }
+                            <li class="page-item">
+                                <a class="page-link" asp-route-categoryid="ViewBag.Categoryid=categoryid" asp-route-subctgid="@ViewBag.SubCategoryid" asp-route-appearanceid="@ViewBag.Appear" asp-route-charid="@ViewBag.Charid" asp-route-applicationid="@ViewBag.Applicate" asp-action="Index" asp-route-page="@totalPages">@totalPages</a>
+                            </li>
+                        }
+                    }
+                    <li class="page-item @(Model.Products.PageIndex == Model.Products.TotalPages ? "disabled" : "")">
+                       @if (Model.LangCode=="az")
+                        {
+                            language = "Sonra";
+                        }
+                        else if (Model.LangCode=="en")
+                        {
+                            language = "Next";
+                        }
+                        else
+                        {
+                            language = "Следующий";
+                        }
+                        <a class="page-link" asp-route-categoryid="ViewBag.Categoryid=categoryid" asp-route-subctgid="@ViewBag.SubCategoryid" asp-route-appearanceid="@ViewBag.Appear" asp-route-charid="@ViewBag.Charid" asp-route-applicationid="@ViewBag.Applicate" asp-action="Index" asp-route-page="@(Model.Products.PageIndex + 1)">@language</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+</main>
+
+
+
+
+
+
+<script>
+
+    let search = document.getElementsByClassName("subcategory-input");
+
+    // var queryString = window.location.search;
+    console.log(search)
+
+    for (var i = 0; i < search.length; i++) {
+        search[i].addEventListener('click', function () {
+            // Bu kısımda gerektiği gibi id ve value değerlerini alabilirsiniz.
+
+            var ctgid = this.id;
+            var subctgid = this.value;
+            var chid = 0;
+            var appeid = 0;
+            var applicatid = 0;
+
+            console.log(ctgid);
+            // Diğer değişkenleri buradan alabilirsiniz.
+            var categoryid = encodeURIComponent(ctgid);
+            var subctgid = encodeURIComponent(subctgid);
+            var applicationid = encodeURIComponent(applicatid);
+            var appearanceid = encodeURIComponent(appeid);
+            var charid = encodeURIComponent(chid);
+            // URL'i oluştur
+            var urlfinal = "/Product?page=1&categoryid=" + categoryid + "&subctgid=" + subctgid + "&applicationid=" + applicationid + "&appearanceid=" + appearanceid + "&charid=" + charid;
+
+            // Sayfayı yeniden yükle ve final URL'ye yönlendir
+            window.location.href = urlfinal;
+        });
+    }
+
+
+
+
+    let searchlinkb = document.getElementById("searchLink");
+   
+
+    searchlinkb.addEventListener('click', function () {
+        var categoryId = getParameterByName('categoryid');
+        var subCategoryId = getParameterByName('subctgid');
+        var radiochar = document.querySelectorAll('input[name="charOption"]:checked');
+        var radioapplicat = document.querySelectorAll('input[name="appOption"]:checked');
+        var radioappear = document.querySelectorAll('input[name="apearOption"]:checked');
+        let selectedCharId=0;
+        let selectedAppearId=0;
+        let selectedAppplicatId=0;
+        // Seçili olan radio input'un değerini al
+        if (radiochar.length > 0) {
+            selectedCharId = radiochar[0].value;
+            console.log('Seçili karakter ID:', selectedCharId);
+        } else {
+            console.log('Hiçbir karakter seçilmedi.');
+        }
+
+        if (radioapplicat.length > 0) {
+            selectedAppplicatId = radioapplicat[0].value;
+            console.log('Seçili uygulama ID:', selectedAppplicatId);
+        } else {
+            console.log('Hiçbir uygulama seçilmedi.');
+        }
+
+        if (radioappear.length > 0) {
+            selectedAppearId = radioappear[0].value;
+            console.log('Seçili görünüş ID:', selectedAppearId);
+        } else {
+            console.log('Hiçbir görünüş seçilmedi.');
+        }
+
+
+        let ctgid = encodeURIComponent(categoryId);
+        let subctgid = encodeURIComponent(subCategoryId);
+        let appid = encodeURIComponent(selectedAppplicatId);
+        let apearid = encodeURIComponent(selectedAppearId);
+        let charid = encodeURIComponent(selectedCharId);
+        var urlfinal = "/Product?page=1&categoryid=" + ctgid + "&subctgid=" + subctgid + "&applicationid=" + appid + "&appearanceid=" + apearid + "&charid=" + charid;
+        window.location.href = urlfinal;
+        // Kategori alanını güncelle
+       
+    });
+
+
+    function getParameterByName(name) {
+        // Mevcut sayfanın URL'sini al
+        var url = window.location.href;
+
+        // Parametreleri URL'den ayıkla
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+        var results = regex.exec(url);
+
+        if (!results) return 0;
+        if (!results[2]) return '';
+
+        // Elde edilen değeri döndür
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+   
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Sayfa yüklendiğinde çağrılan fonksiyon
+        restoreSelectedInputsFromURL();
+    });
+
+    function restoreSelectedInputsFromURL() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var selectedCharId = urlParams.get('charid');
+        var selectedApplicatId = urlParams.get('applicationid');
+        var selectedAppearId = urlParams.get('appearanceid');
+
+        // Seçili olan radio input'ları güncelle
+        setCheckedValue('charOption', selectedCharId);
+        setCheckedValue('appOption', selectedApplicatId);
+        setCheckedValue('apearOption', selectedAppearId);
+        openAccordionsFromURL(urlParams);
+    }
+
+    function setCheckedValue(inputName, value) {
+        var radioInputs = document.querySelectorAll('input[name="' + inputName + '"]');
+        for (var i = 0; i < radioInputs.length; i++) {
+            if (radioInputs[i].value === value) {
+                radioInputs[i].checked = true;
+                break;
+            }
+        }
+    }
+
+    function openAccordionsFromURL(urlParams) {
+        // Örneğin, 'charid' parametresine göre hangi akordiyonun açık olacağını belirle
+        var selectedCharId = urlParams.get('charid');
+        var selectedApplicatId = urlParams.get('applicationid');
+        var selectedAppearId = urlParams.get('appearanceid');
+        if (selectedCharId) {
+            var accordionId = 'collapseTwo';  // Örnek bir akordiyon ID
+            var accordionElement = document.getElementById(accordionId);
+            if (accordionElement) {
+                var accordion = new bootstrap.Collapse(accordionElement);
+            }
+        }
+        if (selectedApplicatId) {
+            var accordionId = 'collapseOne';  // Örnek bir akordiyon ID
+            var accordionElement = document.getElementById(accordionId);
+            if (accordionElement) {
+                var accordion = new bootstrap.Collapse(accordionElement);
+            }
+        }
+        if (selectedAppearId) {
+            var accordionId = 'collapseThree';  // Örnek bir akordiyon ID
+            var accordionElement = document.getElementById(accordionId);
+            if (accordionElement) {
+                var accordion = new bootstrap.Collapse(accordionElement);
+            }
+        }
+    }
+
+</script>
+
+
+@* <script>
+    $(document).ready(function () {
+
+
+
+
+
+        $(".accordion-button").click(function () {
+            // debugger
+
+            var elementId = $(this).attr("id");
+            document.cookie = `categoryid=${elementId}`;
+            // $("#subcategoryitems").empty();
+            $.ajax({
+                type: "POST",
+                url: "/Product/GetAllSubCategory",
+                data: { id: elementId },
+                success: function (data) {
+                    var subcategory = data.subcategories;
+                    var exprop = data.extraProperties;
+                   
+                    var subcategoryContainerId = "subcategoryitems-" + elementId;
+                    var subcategoryContainer = $("#" + subcategoryContainerId);
+                    subcategoryContainer.empty();
+                    $.each(subcategory, function (index, sub) {
+                        var newItem = $("<li>").attr("id", sub.id).addClass("subcategoryclass").append(
+                            // <a> elemanını oluştur ve id ve text değerlerini ata
+                            $("<a>").attr("id", sub.id).text(sub.name)
+                        );
+                      
+                        // #subcategoryItems olan ul'ye li elemanını ekle
+
+                        subcategoryContainer.append(newItem);
+                  
+                    });
+                    
+
+                    // var accordionContainer = $(".accordion-container");
+                    var accordioncollapse = $("#acc-itemforexp");
+                    accordioncollapse.empty();
+                    // Loop through the list and append an accordion for each item
+                    $.each(exprop, function (index, item) {
+                        // Create a unique ID for each accordion
+                        var accordionId = "collapse" + item.id;
+
+                        // Append the accordion to the container
+                        accordioncollapse.append(`
+                        <h2 class="accordion-header" id="heading${item.id}">
+                            <button class="accordion-button collapsed mehsullar-acc-button-2 acc-buttonexp" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapse${item.id}"
+                                    aria-expanded="false" aria-controls="collapse${item.id}" id="${item.id}">
+                                    ${item.name}
+                            </button>
+                        </h2>
+
+                           <div id="collapse${item.id}" class="accordion-collapse collapse"
+                                aria-labelledby="heading${item.id}" data-bs-parent="accordionExample">
+                        <div class="accordion-body" style="padding-top: 0;">
+                        <ul class="column_acc_items border-none">
+                         ${item.value.map(value => `<li><a href="#" class="valueid" id="${value.id}">${value.name}</a></li>`).join('')}
+                        </ul>
+                    </div>
+                    </div>
+                    `);
+                        
+                    });
+
+
+                    // function refreshCookie(cookieName, cookieValue, expirationDays) {
+                    //     var d = new Date();
+                    //     d.setTime(d.getTime() + (expirationDays * 24 * 60 * 60 * 1000));
+                    //     var expires = "expires=" + d.toUTCString();
+                    //     document.cookie = cookieName + "=" + cookieValue + ";" + expires + ";path=/";
+                    // }
+                 
+                    $(".subcategoryclass").click(function () {
+                        var subid = $(this).attr("id");
+                            document.cookie = `subcategoryid=${subid}`;
+                            console.log("Tıklanan subID: " + subid);
+                        // refreshCookie("subcategoryid", subid, null);
+                       
+                    });
+                    $(".acc-buttonexp").click(function () {
+                        var textureId = $(this).attr("id");
+
+                        document.cookie = `textureid=${textureId}`;
+                        console.log("Tıklanan textID: " + textureId);
+                    });
+
+                    $(".valueid").click(function () {
+                        var texturevaluedId = $(this).attr("id");
+                       
+                        document.cookie = `texturevaluid=${texturevaluedId}`;
+                        console.log("Tıklanan valuID: " + texturevaluedId);
+                    });
+
+
+                   
+                    
+
+                }
+            });
+        });
+
+    });
+
+    let searchLink = document.getElementById("searchLink");
+
+    searchLink.addEventListener("click", function () {
+        debugger
+        location.reload();
+        let categoryid = getCookie("categoryid");
+        let subcategoryid = getCookie("subcategoryid");
+        let textureid = getCookie("textureid");
+        let texturevaluid = getCookie("texturevaluid");
+        console.log(categoryid);
+
+
+        let category = encodeURIComponent(categoryid);
+        let subcategory = encodeURIComponent(subcategoryid);
+        let texture = encodeURIComponent(textureid);
+        let texturevalue = encodeURIComponent(texturevaluid);
+
+        let urlfinal = "/Product?page=1&categoryid=" + category + "&subctgid=" + subcategory + "&textureid=" + texture + "&valueid=" + texturevalue;
+        window.location.href = urlfinal;
+    });
+
+    
+    function getCookie(cookieName) {
+        var name = cookieName + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var cookieArray = decodedCookie.split(';');
+
+        for (var i = 0; i < cookieArray.length; i++) {
+            var cookie = cookieArray[i].trim();
+            if (cookie.indexOf(name) == 0) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }
+
+        return "";
+    }
+
+
+</script> *@
+<script>
+
+
+    // let search = document.getElementsByClassName("subcategory-input");
+
+
+    // search.addEventListener("click", function () {
+    //     debugger
+    //     let ctgid = this.id;
+    //     let subctgid = this.value;
+
+    //     console.log(ctgid);
+    //     console.log(ctgid);
+
+    //     let usernameinp = encodeURIComponent(userfullname);
+    //     let statusvalueinp = encodeURIComponent(statusvale);
+    //     let rosebarvalueinp = encodeURIComponent(rosebarvalue);
+    //     let datestartinp = encodeURIComponent(datestart);
+    //     let dateendinp = encodeURIComponent(dateend);
+    //     let urlfinal = "/Payment?page=1&userfullname=" + usernameinp + "&rosebarvalue=" + rosebarvalueinp + "&statusvale=" + statusvalueinp + "&datestart=" + datestartinp + "&dateend=" + dateendinp;
+
+    //     // Refresh the page and redirect it to the final URL
+    //     window.location.href = urlfinal;
+
+    // });
+
+
+    
+</script>
